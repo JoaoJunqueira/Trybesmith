@@ -15,4 +15,12 @@ export default class ProductModel {
     Trybesmith.Products (name,amount) VALUES (?,?)`, [name, amount]);
     return { id: insertId, ...product };
   };
+
+  async getAllProduct(): Promise<IProduct[]> {
+    const allProducts = await this.connection.execute(`SELECT * FROM
+    Trybesmith.Products`);
+    console.log(allProducts);
+    const [rows] = allProducts;
+    return rows as IProduct[];
+  }
 }
