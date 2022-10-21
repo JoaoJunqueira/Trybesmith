@@ -10,8 +10,11 @@ export default class ProductController {
   }
 
   createUserController = async (req: Request, res: Response): Promise<Response> => {
-    const newProduct = await this.service.validateProduct(req.body);
-    return res.status(201).json(newProduct);
+    const productResponse = await this.service.validateProduct(req.body);
+    if (productResponse.status) {
+      return res.status(productResponse.status).json({ message: productResponse.message });
+    }
+    return res.status(201).json(productResponse);
   };
 
   getAllProduct = async (req: Request, res: Response): Promise<Response> => {
