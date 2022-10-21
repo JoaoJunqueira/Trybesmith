@@ -1,5 +1,5 @@
 import { RowDataPacket, Pool } from 'mysql2/promise';
-import ILogin from '../interfaces/login.interface';
+import { IUser } from '../interfaces/login.interface';
 import connection from './connection';
 
 export default class UserModel {
@@ -10,8 +10,9 @@ export default class UserModel {
   }
   
   async getUserByUsernameAndPassword(username: string, password: string) {
-    const [[user]] = await this.connection.execute<(ILogin & RowDataPacket)[]>(
+    const [[user]] = await this.connection.execute<(IUser & RowDataPacket)[]>(
       'SELECT * FROM Trybesmith.Users WHERE username = ? AND password = ?', [username, password]);
-    return user as ILogin;
+    console.log(user);
+    return user as IUser;
   }
 }
