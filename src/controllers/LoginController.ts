@@ -20,7 +20,10 @@ export default class LoginController {
   };
 
   registration = async (req: Request, res: Response): Promise<Response> => {
-    const token = this.service.registration(req.body);
-    return res.status(201).json({ token }); 
+    const response = await this.service.registration(req.body);
+    if (response.status !== 201) {
+      return res.status(response.status).json({ message: response.message });
+    }
+    return res.status(201).json({ token: response.message }); 
   };
 }
