@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { IUser } from '../interfaces/login.interface';
+import { IUser, IRegistration } from '../interfaces/login.interface';
 import UserModel from '../models/UserModel';
 
 export default class LoginService {
@@ -12,8 +12,13 @@ export default class LoginService {
     return token as string;
   }
 
+  public async registration(user: IRegistration) {
+    const newUser = await this.model.createUser(user);
+    const token = this.generateToken(newUser);
+    return token as string;
+  }
+
   private generateToken = (user: IUser): string => {
-    // console.log(typeof user.id);
     const payload = { id: user.id, username: user.username };
     const token = jwt.sign(payload, 'senha');
     return token;

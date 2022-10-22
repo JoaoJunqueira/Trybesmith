@@ -12,5 +12,6 @@ app.get('/products', productController.getAllProduct);
 
 const loginController = new LoginController();
 app.post('/login', loginController.login);
+app.post('/users', loginController.registration);
 
 export default app;

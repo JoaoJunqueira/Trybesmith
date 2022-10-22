@@ -18,4 +18,9 @@ export default class LoginController {
     }
     return res.status(200).json({ token });
   };
+
+  registration = async (req: Request, res: Response): Promise<Response> => {
+    const token = this.service.registration(req.body);
+    return res.status(201).json({ token }); 
+  };
 }

@@ -10,3 +10,11 @@ export interface IUser {
   level: string;
   password: string;
 }
+
+export interface IRegistration { 
+  id?: number;
+  username: string;
+  classe: string;
+  level: number;
+  password: string;
+}
