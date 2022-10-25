@@ -25,4 +25,10 @@ export default class UserModel {
     // console.log(newUser);
     return { id: insertId, username: user.username } as IUser;
   }
+
+  async getAllUsers() {
+    const [users] = await this.connection.execute<(IUser & RowDataPacket)[]>(
+      'SELECT * FROM Trybesmith.Users;');
+    return users;
+  }
 }

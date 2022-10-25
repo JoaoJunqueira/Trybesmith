@@ -1,4 +1,4 @@
-import { RowDataPacket, Pool } from 'mysql2/promise';
+import { RowDataPacket, Pool, ResultSetHeader } from 'mysql2/promise';
 import IOrder from '../interfaces/order.interface';
 import connection from './connection';
 
@@ -18,4 +18,51 @@ export default class OrderModel {
         GROUP BY p.orderId;`);
     return orders;
   }
+
+  // async orderResgistrationOne(productsIds: number[], userId: number) {
+  //   const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
+  //     'INSERT INTO Trybesmith.Orders (userId) VALUES (?)',
+  //     [userId],
+  //   );
+  //   await this.connection.execute<ResultSetHeader>(
+  //     'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ? ',
+  //     [insertId, productsIds[0]],
+  //   );
+  //   return { status: 201, 
+  //     message: { 
+  //       userId,
+  //       productsIds,
+  //     } };
+  // }
+
+  async orderResgistrationOne(productsIds: number[], userId: number) {
+    const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
+      'INSERT INTO Trybesmith.Orders (userId) VALUES (?)',
+      [userId],
+    );
+    await Promise.all(productsIds.map(async (productId) => {
+      await this.connection.execute<ResultSetHeader>(
+        'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ? ',
+        [insertId, productId],
+      );
+    }));
+    return { status: 201, 
+      message: { 
+        userId,
+        productsIds,
+      } };
+  }
+
+  // async orderResgistrationAll(productsIds: number[], userId: number) {
+  //   productsIds.forEach(async (productId) => await this.connection.execute<ResultSetHeader>(
+  //     'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ? ',
+  //     [insertId, productId],
+  //   );)
+  // for (let i = 0; i < productsIds.length; i += 1) {
+  //   const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
+  //     'INSERT INTO Trybesmith.Orders (userId) VALUES (?)',
+  //     [userId],
+  //   );
+  // }
+  // }
 }
